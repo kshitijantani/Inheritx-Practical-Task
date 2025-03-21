@@ -112,7 +112,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
 router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const postId = req.params.id;
-        const post = Post.findById(postId)
+        const post = await Post.findById(postId)
 
         if (!post) return res.status(404).json({ message: "Post not found" });
 

@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
     try {
         // Checks if user with given email address exists or not
         const existingUser = await User.findOne({ email });
-        if (existingUser) res.status(400).json({ message: 'User with this email already exists!' });
+        if (existingUser) return res.status(400).json({ message: 'User with this email already exists!' });
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
 
 // Login User
 router.post('/login', async (req, res) => {
-    const { email, passwsord } = req.body;
+    const { email, password } = req.body;
     try {
 
         // Find User in database
@@ -39,9 +39,9 @@ router.post('/login', async (req, res) => {
         }
 
         // Comapre password to login
-        const isMatch = await user.comparePassword(passwsord);
+        const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            res.status(401).json({ message: "Invalid credentials" });
+           return res.status(401).json({ message: "Invalid credentials" });
         }
 
         // Generate new JWT token
