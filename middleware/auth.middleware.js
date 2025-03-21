@@ -3,8 +3,11 @@ const jwt = require('jsonwebtoken');
 // Middleware function
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const token = !authHeader || !authHeader.startsWith("Bearer ") //Bearer token
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ message: "Authorization token missing" });
+    }
 
+    const token = authHeader.split(" ")[1];
     if (!token) {
         return res.status(401).json({ message: 'Not authorized' });
     }
